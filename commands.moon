@@ -4,22 +4,24 @@ bcrypt = require "bcrypt"
 
 import Items, OrphanItems, Tags, ItemTags, Users from require "models"
 import respond_to, json_params from require "lapis.application"
+import trim from require "lapis.util"
 
-split = (str, tab) ->
-  tab = {} if not tab
+split = (str) ->
+  tab = {}
   for word in str\gmatch "%S+"
     table.insert(tab, word)
   return tab
 
 patterns = { "^@.+", "^%+.+", "^#.+", "^([^:]+:).+" }
 find_tags = (tab) ->
-  results = {}
+  tags = {}
   for word in *tab
     for pattern in *patterns
-      if valid = word\match pattern
-        table.insert results, valid
+      tag = word\match pattern
+      if tag and tag\len! > 0
+        table.insert tags, tag
         break
-  return results
+  return tags
 
 commands = {
   account: (args) =>
@@ -27,7 +29,7 @@ commands = {
       when "create"
         if #args < 2
           return nil, "You must specify a password."
-        @action = "Welcome #{args[1]}!"
+        @action = string.gsub "Welcome #{args[1]}!", "]", "\\]"
         response, err = Users\create {
           name: args[1]
           digest: bcrypt.digest(args[2], config.digest_rounds)
@@ -39,7 +41,7 @@ commands = {
         if @user = Users\find name: args[1]
           if bcrypt.verify args[2], @user.digest
             @session.id = @user.id
-            return "Welcome #{@user.name}!"
+            return string.gsub "Welcome #{@user.name}!", "]", "\\]"
         return nil, "Invalid username or password."
       when "logout"
         @action = "You are logged out."
@@ -56,10 +58,9 @@ commands = {
     if #args > 0
       text = table.concat args, " "
     if @params.input and @params.input\len! > 0
-      text ..= "\n#{@params.input}"
-      split(@params.input, args) -- add input to args to be checked for tags
-    if text\sub(1, 1) == "\n"
-      text = text\sub 2
+      text ..= "\n\n#{@params.input}"
+      args = split text -- re-generate full arguments when needed
+    text = trim text
     tags = find_tags args
 
     item, err = Items\create {

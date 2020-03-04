@@ -7,4 +7,4 @@ class extends lapis.Application
   handle_error: (err, trace) =>
     return layout: false, status: 500, "[[;red;]#{err\gsub "]", "\\]"}\n#{trace\gsub "]", "\\]"}]"
 
-  [index: "/"]: => render: true
+  [terminal: "/terminal"]: => render: true
