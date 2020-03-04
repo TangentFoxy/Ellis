@@ -4,7 +4,7 @@ $(function() {
 
     term.pause()
 
-    let input = $("#input").value
+    let input = $("#input")[0].value
 
     $.ajax({
       type: "POST",
@@ -12,7 +12,7 @@ $(function() {
       data: { command: command, input: input },
       complete: function(res) {
         term.echo(res.responseText, {keepWords: true}).resume()
-        $("#input").value = ""
+        $("#input")[0].value = ""
       }
     })
   }, {
