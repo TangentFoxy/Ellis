@@ -77,14 +77,13 @@ commands = {
       else
         for text in *tags
           tag = Tags\find match: text
-          if not tag
+          if tag
+            _, err = tag\update score: tag.score + 1
+          else
             tag, err = Tags\create user_id: @user.id, match: text, score: 1
             if err
               table.insert errs, err
           if tag
-            tag, err = tag\update score: tag.score + 1
-            if err
-              table.insert errs, err
             item_tag, err = ItemTags\create tag_id: tag.id, item_id: item.id
             if err
               table.insert errs, err

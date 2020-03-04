@@ -17,7 +17,7 @@ $(function() {
     })
   }, {
     prompt: "> ",
-    // greetings: "[[;lime;]Welcome. Type 'learn' and hit enter if you need help.]",
+    greetings: "[[;lime;]Welcome.]",
     exit: false,
     historySize: false
   })
