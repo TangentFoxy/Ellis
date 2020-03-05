@@ -38,10 +38,13 @@ commands = {
         @session.id = response.id if response
         return response, err
       when "login"
+        if #args < 2
+          return nil, "You must enter your username and password."
         if @user = Users\find name: args[1]
           if bcrypt.verify args[2], @user.digest
             @session.id = @user.id
-            return string.gsub "Welcome #{@user.name}!", "]", "\\]"
+            welcome = string.gsub "Welcome #{@user.name}!", "]", "\\]"
+            return welcome
         return nil, "Invalid username or password."
       when "logout"
         @action = "You are logged out."
