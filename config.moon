@@ -10,4 +10,6 @@ config "production", ->
     database os.getenv("DB_NAME") or "postgres"
   port 80
   num_workers 4
+
   digest_rounds 9
+  console os.getenv("ENABLE_CONSOLE") or false

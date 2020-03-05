@@ -1,6 +1,11 @@
 lapis = require "lapis"
+config = require("lapis.config").get!
 
 class extends lapis.Application
+  "/console": =>
+    if config and config.console and config.console != "false"
+      require("lapis.console").make env: "all"
+
   layout: "layout"
   @include "commands"
 

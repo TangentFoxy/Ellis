@@ -1,0 +1,27 @@
+version: '3'
+volumes:
+  db: {}
+
+services:
+  ellis:
+    image: guard13007/ellis:testing
+    environment:
+      - ENABLE_CONSOLE=true
+      - SESSION_SECRET=secret
+      - DB_HOST=postgres
+      - DB_NAME=${DB_NAME:-ellis}
+      - DB_USER=${DB_USER:-ellis}
+      - DB_PASS=${DB_PASS:-password}
+    depends_on:
+      - postgres
+    ports:
+      - '8000:80'
+
+  postgres:
+    image: postgres:12.1-alpine
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME:-ellis}
+      - POSTGRES_USER=${DB_USER:-ellis}
+      - POSTGRES_PASSWORD=${DB_PASS:-password}

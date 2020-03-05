@@ -9,6 +9,7 @@ RUN apt-get install libssl-dev git -y
 RUN luarocks install lapis
 RUN luarocks install luacrypto # no idea why this is still required, it should not be
 RUN luarocks install bcrypt
+RUN luarocks install lapis-console
 
 # clean up
 RUN apt-get autoremove -y
