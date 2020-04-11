@@ -2,7 +2,7 @@ import Model from require "lapis.db.model"
 
 class Users extends Model
   @constraints: {
-    -- digest cannot by checked here, passwords must be checked before they are converted to a digest
+    -- digest cannot be checked here, passwords must be checked before they are converted to a digest
 
     name: (value) =>
       if not value or value\len! < 1
