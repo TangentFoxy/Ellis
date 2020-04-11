@@ -27,7 +27,4 @@ class Users extends Model
 
         if value\find "%s"
           return "Email addresses cannot contain spaces."
-
-        if value\len! > 0 and Users\find email: value
-          return "That email address is already tied to an account."
   }
